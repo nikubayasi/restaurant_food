@@ -58,7 +58,7 @@
                                         <p class="text-success">{{ Session::get('success') }}</p>
                                     @endif
 
-                                    <form class="mt-4 pt-2" method="post" action="{{ route('admin.login_submit') }}">
+                                    <form class="mt-4 pt-2" method="post" action="{{ route('client.login_submit') }}">
                                         @csrf
                                         <div class="mb-3">
                                             <label class="form-label">Email</label>
