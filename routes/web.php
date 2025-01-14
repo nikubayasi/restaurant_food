@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\CategoryController;
 
 
 // Route::get('/', function () {
@@ -14,13 +15,16 @@ Route::get('/', [UserController::class, 'Index'])->name('index');
 
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('frontend.dashboard.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile/store', [UserController::class, 'ProfileStore'])->name('profile.store');
+    Route::get('/change/password', [UserController::class, 'ChangePassword'])->name('change.password');
+    Route::put('/user/password/update', [UserController::class, 'UserPasswordUpdate'])->name('user.password.update');
+
+    Route::get('/user/logout', [UserController::class, 'UserLogout'])->name('user.logout');
 });
 
 require __DIR__ . '/auth.php';
@@ -61,3 +65,11 @@ Route::middleware('client')->group(function () {
     Route::post('/client/change/update', [ClientController::class, 'ClientPasswordUpdate'])->name('client.password.update');
 });
 Route::get('/client/logout', [ClientController::class, 'ClientLogout'])->name('client.logout');
+
+// All Admin Category
+Route::middleware('admin')->group(function () {
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('/all/category', 'AllCategory')->name('all.category');
+        Route::get('/add/category', 'AddCategory')->name('add.category');
+    });
+});
