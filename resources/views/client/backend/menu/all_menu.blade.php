@@ -1,6 +1,5 @@
-@extends('admin.admin_dashboard')
-@section('admin')
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+@extends('client.client_dashboard')
+@section('client')
     <div class="page-content">
         <div class="container-fluid">
 
@@ -8,12 +7,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">All Category</h4>
+                        <h4 class="mb-sm-0 font-size-18">All Menu</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <a href="{{ route('add.category') }}" type="button"
-                                    class="btn btn-primary waves-effect waves-light">Add Category</a>
+                                <a href="{{ route('add.menu') }}" class="btn btn-primary waves-effect waves-light">Add
+                                    Menu</a>
                             </ol>
                         </div>
 
@@ -25,71 +24,45 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
+
                         <div class="card-body">
 
                             <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
                                 <thead>
                                     <tr>
                                         <th>Sl</th>
-                                        <th>Category Name</th>
+                                        <th>Menu Name</th>
                                         <th>Image</th>
-                                        <th>Action</th>
+                                        <th>Action </th>
                                     </tr>
                                 </thead>
+
+
                                 <tbody>
-                                    @foreach ($category as $key => $item)
+                                    @foreach ($menu as $key => $item)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $item->category_name }}</td>
+                                            <td>{{ $item->menu_name }}</td>
                                             <td><img src="{{ asset($item->image) }}" alt=""
                                                     style="width: 70px; height:70px;"></td>
-                                            <td><a href="{{ route('edit.category', $item->id) }}" type="button"
+                                            <td><a href="{{ route('edit.menu', $item->id) }}"
                                                     class="btn btn-info waves-effect waves-light">Edit</a>
-                                                <a href="{{ route('delete.category', $item->id) }}" type="button"
+                                                <a href="{{ route('delete.menu', $item->id) }}"
                                                     class="btn btn-danger waves-effect waves-light"
                                                     id="delete">Delete</a>
                                             </td>
                                         </tr>
                                     @endforeach
+
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                 </div> <!-- end col -->
-            </div> <!-- end row --><!-- end row -->
+            </div> <!-- end row -->
+
+
         </div> <!-- container-fluid -->
     </div>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#image').change(function(e) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#showImage').attr('src', e.target.result)
-                }
-                reader.readAsDataURL(e.target.files['0']);
-            })
-        })
-    </script>
-    <script>
-        @if (Session::has('message'))
-            var type = "{{ Session::get('alert-type', 'info') }}"
-            switch (type) {
-                case 'info':
-                    toastr.info(" {{ Session::get('message') }} ");
-                    break;
-
-                case 'success':
-                    toastr.success(" {{ Session::get('message') }} ");
-                    break;
-
-                case 'warning':
-                    toastr.warning(" {{ Session::get('message') }} ");
-                    break;
-
-                case 'error':
-                    toastr.error(" {{ Session::get('message') }} ");
-                    break;
-            }
-        @endif
-    </script>
 @endsection
