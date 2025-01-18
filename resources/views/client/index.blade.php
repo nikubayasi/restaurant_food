@@ -1,8 +1,19 @@
 @extends('client.client_dashboard')
 @section('client')
+    @php
+        $id = Auth::guard('client')->id();
+        $client = App\Models\Client::find($id);
+        $status = $client->status;
+    @endphp
     <div class="page-content">
         <div class="container-fluid">
 
+            @if ($status === '1')
+                <h4>Restaurant Account is <span class="text-success">Active</span></h4>
+            @else
+                <h4>Restaurant Account is <span class="text-danger">InActive</span></h4>
+                <p class="text-danger"><b>Plz wait admin will check and approve your account</b></p>
+            @endif
             <!-- start page title -->
             <div class="row">
                 <div class="col-12">
@@ -221,14 +232,16 @@
                                                 <div class="row g-0">
                                                     <div class="col-6">
                                                         <div>
-                                                            <p class="mb-2 text-muted text-uppercase font-size-11">Income
+                                                            <p class="mb-2 text-muted text-uppercase font-size-11">
+                                                                Income
                                                             </p>
                                                             <h5 class="fw-medium">$ 2632.46</h5>
                                                         </div>
                                                     </div>
                                                     <div class="col-6">
                                                         <div>
-                                                            <p class="mb-2 text-muted text-uppercase font-size-11">Expenses
+                                                            <p class="mb-2 text-muted text-uppercase font-size-11">
+                                                                Expenses
                                                             </p>
                                                             <h5 class="fw-medium">-$ 924.38</h5>
                                                         </div>
@@ -264,13 +277,15 @@
                                                             <i class="mdi mdi-currency-btc"></i>
                                                         </span>
                                                     </div>
-                                                    <h4 class="mt-3 lh-base fw-normal text-white"><b>Bitcoin</b> News</h4>
-                                                    <p class="text-white-50 font-size-13">Bitcoin prices fell sharply amid
+                                                    <h4 class="mt-3 lh-base fw-normal text-white"><b>Bitcoin</b> News
+                                                    </h4>
+                                                    <p class="text-white-50 font-size-13">Bitcoin prices fell sharply
+                                                        amid
                                                         the global sell-off in equities. Negative news
                                                         over the Bitcoin past week has dampened Bitcoin basics
                                                         sentiment for bitcoin. </p>
-                                                    <button type="button" class="btn btn-light btn-sm">View details <i
-                                                            class="mdi mdi-arrow-right ms-1"></i></button>
+                                                    <button type="button" class="btn btn-light btn-sm">View details
+                                                        <i class="mdi mdi-arrow-right ms-1"></i></button>
                                                 </div>
                                             </div>
                                             <!-- end carousel-item -->
@@ -284,12 +299,13 @@
                                                         </span>
                                                     </div>
                                                     <h4 class="mt-3 lh-base fw-normal text-white"><b>ETH</b> News</h4>
-                                                    <p class="text-white-50 font-size-13">Bitcoin prices fell sharply amid
+                                                    <p class="text-white-50 font-size-13">Bitcoin prices fell sharply
+                                                        amid
                                                         the global sell-off in equities. Negative news
                                                         over the Bitcoin past week has dampened Bitcoin basics
                                                         sentiment for bitcoin. </p>
-                                                    <button type="button" class="btn btn-light btn-sm">View details <i
-                                                            class="mdi mdi-arrow-right ms-1"></i></button>
+                                                    <button type="button" class="btn btn-light btn-sm">View details
+                                                        <i class="mdi mdi-arrow-right ms-1"></i></button>
                                                 </div>
                                             </div>
                                             <!-- end carousel-item -->
@@ -302,13 +318,15 @@
                                                             <i class="mdi mdi-litecoin"></i>
                                                         </span>
                                                     </div>
-                                                    <h4 class="mt-3 lh-base fw-normal text-white"><b>Litecoin</b> News</h4>
-                                                    <p class="text-white-50 font-size-13">Bitcoin prices fell sharply amid
+                                                    <h4 class="mt-3 lh-base fw-normal text-white"><b>Litecoin</b> News
+                                                    </h4>
+                                                    <p class="text-white-50 font-size-13">Bitcoin prices fell sharply
+                                                        amid
                                                         the global sell-off in equities. Negative news
                                                         over the Bitcoin past week has dampened Bitcoin basics
                                                         sentiment for bitcoin. </p>
-                                                    <button type="button" class="btn btn-light btn-sm">View details <i
-                                                            class="mdi mdi-arrow-right ms-1"></i></button>
+                                                    <button type="button" class="btn btn-light btn-sm">View details
+                                                        <i class="mdi mdi-arrow-right ms-1"></i></button>
                                                 </div>
                                             </div>
                                             <!-- end carousel-item -->

@@ -16,7 +16,9 @@ class CouponController extends Controller
     //
     public function AllCoupon()
     {
-        $coupon = Coupon::latest()->get();
+        $cid = Auth::guard('client')->id();
+
+        $coupon = Coupon::where('client_id', $cid)->latest()->get();
         return view('client.backend.coupon.all_coupon', compact('coupon'));
     }
     public function AddCoupon()
