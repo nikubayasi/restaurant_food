@@ -3,18 +3,20 @@
 namespace App\Http\Controllers\Client;
 
 
+use Carbon\Carbon;
+use App\Models\City;
 use App\Models\Menu;
+use App\Models\Client;
+
+use App\Models\Gallery;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\City;
-
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
-use Carbon\Carbon;
 
 class RestaurantController extends Controller
 {
@@ -224,6 +226,102 @@ class RestaurantController extends Controller
         Product::find($id)->delete();
         $notification = array(
             'message' => 'Product Delete Successfully',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification);
+    }
+
+    public function ChangeStatus(Request $request)
+    {
+        $product = Product::find($request->product_id);
+        $product->status = $request->status;
+        $product->save();
+        return response()->json(['success' => 'Status Change Successfully']);
+    }
+    public function AllGallery()
+    {
+        $gallery = Gallery::latest()->get();
+        return view('client.backend.gallery.all_gallery', compact('gallery'));
+    }
+
+    public function AddGallery()
+    {
+        $gallery = Gallery::latest()->get();
+        $client = Client::latest()->get();
+
+        return view('client.backend.gallery.add_gallery', compact('gallery', 'client'));
+    }
+
+    public function StoreGallery(Request $request)
+    {
+        $images = $request->file('gallery_img');
+        foreach ($images as $gimg) {
+            $manager = new ImageManager(new Driver());
+            $name_gen = hexdec(uniqid()) . '.' . $gimg->getClientOriginalExtension();
+            $img = $manager->read($gimg);
+            $img->resize(500, 500)->save(public_path('upload/gallery/' . $name_gen));
+            $save_url = 'upload/gallery/' . $name_gen;
+            Gallery::insert([
+                'client_id' => Auth::guard('client')->id(),
+                'gallery_img' => $save_url,
+            ]);
+        }
+        $notification = array(
+            'message' => 'Gallery Inserted Successfully',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('all.gallery')->with($notification);
+    }
+
+    public function EditGallery($id)
+    {
+        $gallery = Gallery::find($id);
+
+        return view('client.backend.gallery.edit_gallery', compact('gallery'));
+    }
+
+    public function UpdateGallery(Request $request)
+    {
+        $gallery_id = $request->id;
+        if ($request->hasFile('gallery_img')) {
+            $image = $request->file('gallery_img');
+            $manager = new ImageManager(new Driver());
+            $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+            $img = $manager->read($image);
+            $img->resize(500, 500)->save(public_path('upload/gallery/' . $name_gen));
+            $save_url = 'upload/gallery/' . $name_gen;
+
+            $gallery = Gallery::find($gallery_id);
+            if ($gallery->gallery_img) {
+                $img = $gallery->gallery_img;
+                unlink($img);
+            }
+
+            $gallery->update([
+                'gallery_img' => $save_url,
+            ]);
+            $notification = array(
+                'message' => 'Gallery Updated Successfully',
+                'alert-type' => 'success'
+            );
+            return redirect()->route('all.gallery')->with($notification);
+        } else {
+            $notification = array(
+                'message' => 'No Image Selected For Updated',
+                'alert-type' => 'warning'
+            );
+            return redirect()->back()->with($notification);
+        }
+    }
+    public function DeleteGallery($id)
+    {
+        $item = Gallery::find($id);
+        $img = $item->gallery_img;
+
+        unlink($img);
+        Gallery::find($id)->delete();
+        $notification = array(
+            'message' => 'Gallery Delete Successfully',
             'alert-type' => 'success'
         );
         return redirect()->back()->with($notification);

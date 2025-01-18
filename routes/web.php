@@ -7,6 +7,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Client\RestaurantController;
+use App\Http\Controllers\Client\CouponController;
 
 
 // Route::get('/', function () {
@@ -107,5 +108,22 @@ Route::middleware('client')->group(function () {
         Route::get('/edit/product/{id}', 'EditProduct')->name('edit.product');
         Route::post('/update/product', 'UpdateProduct')->name('product.update');
         Route::get('/delete/product/{id}', 'DeleteProduct')->name('delete.product');
+        Route::get('/changeStatus', 'ChangeStatus');
+    });
+    Route::controller(RestaurantController::class)->group(function () {
+        Route::get('/all/gallery', 'AllGallery')->name('all.gallery');
+        Route::get('/add/gallery', 'AddGallery')->name('add.gallery');
+        Route::post('/store/gallery', 'StoreGallery')->name('gallery.store');
+        Route::get('/edit/gallery/{id}', 'EditGallery')->name('edit.gallery');
+        Route::post('/update/gallery', 'UpdateGallery')->name('gallery.update');
+        Route::get('/delete/gallery/{id}', 'DeleteGallery')->name('delete.gallery');
+    });
+    Route::controller(CouponController::class)->group(function () {
+        Route::get('/all/coupon', 'AllCoupon')->name('all.coupon');
+        Route::get('/add/coupon', 'AddCoupon')->name('add.coupon');
+        Route::post('/store/coupon', 'StoreCoupon')->name('coupon.store');
+        Route::get('/edit/coupon/{id}', 'EditCoupon')->name('edit.coupon');
+        Route::post('/update/coupon', 'UpdateCoupon')->name('coupon.update');
+        Route::get('/delete/coupon/{id}', 'DeleteCoupon')->name('delete.coupon');
     });
 });

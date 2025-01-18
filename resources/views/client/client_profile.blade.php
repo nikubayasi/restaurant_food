@@ -98,50 +98,56 @@
                                         <input class="form-control" name="email" type="text"
                                             value="{{ $profileData->email }}" id="example-text-input">
                                     </div>
-
                                     <div class="mb-3">
-                                        <label for="example-number-input" class="form-label">Phone Number</label>
-                                        <input class="form-control" name="phone" type="number"
-                                            value="{{ $profileData->phone }}" id="example-number-input">
+                                        <label for="example-number-input" class="form-label">City</label>
+                                        <select name="city_id" class="form-select" id="">
+                                            <option>Select</option>
+                                            @foreach ($city as $cit)
+                                                <option value="{{ $cit->id }}"
+                                                    {{ $cit->id == $profileData->city_id ? 'selected' : '' }}>
+                                                    {{ $cit->city_name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="example-text-input" class="form-label">Address</label>
-                                        <input class="form-control" name="address" type="text"
-                                            value="{{ $profileData->address }}" id="example-number-input">
+                                        <label for="example-number-input" class="form-label">Restaurant Info</label>
+                                        <textarea class="form-control" name="shop_info" id="basicpill-address-input">{{ $profileData->shop_info }}</textarea>
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="example-number-input" class="form-label">Cover Photo</label>
+                                        <input class="form-control" name="cover_photo" type="file"
+                                            value="{{ $profileData->cover_photo }}" id="image">
+                                    </div>
+                                    <img id="showImage"
+                                        src="{{ !empty($profileData->cover_photo) ? url('upload/client_images/' . $profileData->cover_photo) : url('upload/no_image.jpg') }}"
+                                        alt="" class="p-1 bg-primary" width="100" height="100" />
 
                                 </div>
                             </div>
 
                             <div class="col-lg-4">
+                                <div class="mb-3">
+                                    <label for="example-text-input" class="form-label">Address</label>
+                                    <input class="form-control" name="address" type="text"
+                                        value="{{ $profileData->address }}" id="example-number-input">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="example-number-input" class="form-label">Phone Number</label>
+                                    <input class="form-control" name="phone" type="number"
+                                        value="{{ $profileData->phone }}" id="example-number-input">
+                                </div>
                                 <div class="mt-3 mt-lg-0">
                                     <div class="mb-3 text-center">
                                         <img id="showImage"
                                             src="{{ !empty($profileData->photo) ? url('upload/client_images/' . $profileData->photo) : url('upload/no_image.jpg') }}"
-                                            alt="" class="image-fluid rounded-circle p-1 bg-primary" width="110">
+                                            alt="" class="image-fluid rounded-circle p-1 bg-primary"
+                                            width="110">
                                     </div>
                                     <div class="mb-3">
                                         <label for="example-text-input" class="form-label">Profile Image</label>
                                         <input class="form-control" name="photo" type="file" id="image">
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="example-date-input" class="form-label">Date</label>
-                                        <input class="form-control" type="date" value="2019-08-19"
-                                            id="example-date-input">
-                                    </div>
 
-                                    <div>
-                                        <label for="exampleDataList" class="form-label">Datalists</label>
-                                        <input class="form-control" list="datalistOptions" id="exampleDataList"
-                                            placeholder="Type to search...">
-                                        <datalist id="datalistOptions">
-                                            <option value="San Francisco">
-                                            <option value="New York">
-                                            <option value="Seattle">
-                                            <option value="Los Angeles">
-                                            <option value="Chicago">
-                                        </datalist>
-                                    </div>
                                     <div class="mt-4">
                                         <button type="submit" class="btn btn-primary waves-effect waves-light">Save
                                             Changes</button>
