@@ -13,36 +13,62 @@
                     $clients = App\Models\Client::latest()->where('status', 1)->get();
                 @endphp
                 @foreach ($clients as $client)
+                    @php
+                        $products = App\Models\Product::where('client_id', $client->id)
+                            ->limit(3)
+                            ->get();
+                        $menuNames = $products
+                            ->map(function ($product) {
+                                return $product->menu->menu_name;
+                            })
+                            ->toArray();
+                        $menuNamesString = implode('. ', $menuNames);
+                        $coupon = App\Models\Coupon::where('client_id', $client->id)
+                            ->where('status', '1')
+                            ->first();
+                    @endphp
                     <div class="col-md-12">
                         <div class="owl-carousel owl-carousel-four owl-theme">
-                            <div class="item m-2 mb-2">
+                            <div class="item m-1 mb-2">
                                 <div class="list-card bg-white h-100 rounded overflow-hidden position-relative shadow-sm">
                                     <div class="list-card-image">
                                         <div class="star position-absolute"><span class="badge badge-success"><i
                                                     class="icofont-star"></i> 3.1 (300+)</span></div>
-                                        <div class="favourite-heart text-danger position-absolute"><a href="detail.html"><i
-                                                    class="icofont-heart"></i></a></div>
-                                        <div class="member-plan position-absolute"><span
-                                                class="badge badge-dark">Promoted</span></div>
-                                        <a href="detail.html">
+
+                                        <div class="favourite-heart text-danger position-absolute">
+                                            <a aria-label="Add to Widhlist" onclick="addWishList({{ $client->id }})">
+                                                <i class="icofont-heart"></i>
+                                            </a>
+                                        </div>
+                                        @if ($coupon)
+                                            <div class="member-plan position-absolute"><span
+                                                    class="badge badge-dark">Promoted</span></div>
+                                        @else
+                                        @endif
+                                        <a href="{{ route('res.details', $client->id) }}">
                                             <img src="{{ asset('upload/client_images/' . $client->photo) }}"
-                                                class="img-fluid item-img">
+                                                class="img-fluid item-img" style="width:300px; height:300px;">
                                         </a>
                                     </div>
-                                    <div class="p-3 position-relative">
+                                    <div class="p-2 position-relative">
                                         <div class="list-card-body">
-                                            <h6 class="mb-1"><a href="detail.html"
+                                            <h6 class="mb-1"><a href="{{ route('res.details', $client->id) }}"
                                                     class="text-black">{{ $client->name }}</a>
                                             </h6>
-                                            <p class="text-gray mb-3"></p>
+                                            <p class="text-gray mb-3">{{ $menuNamesString }}</p>
                                             <p class="text-gray mb-3 time"><span
                                                     class="bg-light text-dark rounded-sm pl-2 pb-1 pt-1 pr-2"><i
-                                                        class="icofont-wall-clock"></i> 20–25 min</span> <span
-                                                    class="float-right text-black-50"> $250 FOR TWO</span></p>
+                                                        class="icofont-wall-clock"></i> 20–25 min</span> </p>
                                         </div>
                                         <div class="list-card-badge">
-                                            <span class="badge badge-success">OFFER</span> <small>65% off | Use Coupon
-                                                OSAHAN50</small>
+                                            @if ($coupon)
+                                                <span class="badge badge-success">OFFER</span>
+                                                <small>{{ $coupon->discount }}% off | Use Coupon
+                                                    {{ $coupon->coupon_name }}</small>
+                                            @else
+                                                <span class="badge badge-success">OFFER</span>
+                                                <small>Right Now There Have No Coupon</small>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

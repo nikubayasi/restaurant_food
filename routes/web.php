@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin\ManageController;
 use App\Http\Controllers\Client\RestaurantController;
 use App\Http\Controllers\Client\CouponController;
 
-
+use App\Http\Controllers\Frontend\HomeController;
 // Route::get('/', function () {
 //     return view('index');
 // });
@@ -28,6 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/user/password/update', [UserController::class, 'UserPasswordUpdate'])->name('user.password.update');
 
     Route::get('/user/logout', [UserController::class, 'UserLogout'])->name('user.logout');
+    // Get WishList data for user
+    Route::get('/all/wishlist/', [HomeController::class, 'AllWishList'])->name('all.wishlist');
 });
 
 require __DIR__ . '/auth.php';
@@ -146,3 +148,8 @@ Route::middleware(['client', 'status'])->group(function () {
 
 // That will be for all user
 Route::get('/changeStatus', [RestaurantController::class, 'ChangeStatus']);
+
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/restaurant/details/{id}', 'RestaurantDetails')->name('res.details');
+    Route::post('/add-wish-list/{id}', 'AddWishList');
+});
