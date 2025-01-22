@@ -8,8 +8,6 @@ use App\Models\Client;
 use App\Models\Menu;
 use App\Models\Gallery;
 use App\Models\WishList;
-
-
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -53,5 +51,15 @@ class HomeController extends Controller
     {
         $wishlist = WishList::where('user_id', Auth::id())->get();
         return view('frontend.dashboard.all_wishlist', compact('wishlist'));
+    }
+
+    public function RemoveWishList($id)
+    {
+        Wishlist::find($id)->delete();
+        $notification = array(
+            'message' => 'Wishlist Delete Successfully',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification);
     }
 }
