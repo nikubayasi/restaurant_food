@@ -1,8 +1,5 @@
 <!-- Modal -->
-@php
-    $id = Auth::user()->id;
-    $profileData = App\Models\User::find($id);
-@endphp
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light osahan-nav shadow-sm">
     <div class="container">
         <a class="navbar-brand" href="{{ route('index') }}"><img alt="logo"

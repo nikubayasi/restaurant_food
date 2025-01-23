@@ -3,7 +3,7 @@
         <div class="d-flex">
             <!-- LOGO -->
             <div class="navbar-brand-box">
-                <a href="{{ route('/') }}" class="logo logo-dark">
+                <a href="{{  route('index')  }}" class="logo logo-dark">
                     <span class="logo-sm">
                         <img src="{{ asset('backend/assets/images/logo-sm.svg') }}" alt="" height="24">
                     </span>
@@ -13,7 +13,7 @@
                     </span>
                 </a>
 
-                <a href="{{ route('/') }}" class="logo logo-light">
+                <a href="{{  route('index') }}" class="logo logo-light">
                     <span class="logo-sm">
                         <img src="{{ asset('backend/assets/images/logo-sm.svg') }}" alt="" height="24">
                     </span>
