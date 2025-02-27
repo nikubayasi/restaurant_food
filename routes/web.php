@@ -12,6 +12,11 @@ use App\Http\Controllers\Client\CouponController;
 
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\CartController;
+use App\Http\Controllers\Frontend\OrderController;
+use App\Http\Controllers\Admin\ManageOrderController;
+
+
+
 
 // Route::get('/', function () {
 //     return view('index');
@@ -33,6 +38,14 @@ Route::middleware('auth')->group(function () {
     // Get WishList data for user
     Route::get('/all/wishlist/', [HomeController::class, 'AllWishList'])->name('all.wishlist');
     Route::get('/remove/wishlist/{id}', [HomeController::class, 'RemoveWishList'])->name('remove.wishlist');
+
+    Route::controller(ManageOrderController::class)->group(function () {
+        Route::get('/user/order/list', 'UserOrderList')->name('user.order.list');
+        Route::get('/user/order/details/{id}', 'UserOrderDetails')->name('user.order.details');
+        Route::get('/user/order/download/{id}', 'UserInvoiceDownload')->name('user.invoice.download');
+    });
+
+
 });
 
 require __DIR__ . '/auth.php';
@@ -104,7 +117,6 @@ Route::middleware('admin')->group(function () {
     Route::controller(ManageController::class)->group(function () {
         Route::get('/pending/restaurant', 'PendingRestaurant')->name('pending.restaurant');
         Route::get('/approve/restaurant', 'ApproveRestaurant')->name('approve.restaurant');
-
         Route::get('/clientchangeStatus', 'ClientChangeStatus');
         Route::get('/all/banner', 'AllBanner')->name('all.banner');
         Route::post('/banner/store', 'BannerStore')->name('banner.store');
@@ -112,7 +124,25 @@ Route::middleware('admin')->group(function () {
         Route::post('/banner/update', 'BannerUpdate')->name('banner.update');
         Route::get('/delete/banner/{id}', 'DeleteBanner')->name('delete.banner');
     });
+
+    Route::controller(ManageOrderController::class)->group(function () {
+        Route::get('/pending/order', 'PendingOrder')->name('pending.order');
+        Route::get('/confirm/order', 'ConfirmgOrder')->name('confirm.order');
+        Route::get('/processing/order', 'ProcessingOrder')->name('processing.order');
+        Route::get('/deliverd/order', 'DeliverdOrder')->name('deliverd.order');
+        Route::get('/admin/order/details/{id}', 'AdminOrderDetails')->name('admin.order.details');
+    });
+
+
+    Route::controller(ManageOrderController::class)->group(function () {
+        Route::get('/pending_to_confirm/{id}', 'PendingToConfirm')->name('pending_to_confirm');
+        Route::get('/confirm_to_processing/{id}', 'ConfirmToProcessing')->name('confirm_to_processing');
+        Route::get('/processing_to_deliverd/{id}', 'ProcessingToDeliverd')->name('processing_to_deliverd');
+    });
+
 });
+
+
 Route::middleware(['client', 'status'])->group(function () {
     Route::controller(RestaurantController::class)->group(function () {
         Route::get('/all/menu', 'AllMenu')->name('all.menu');
@@ -147,6 +177,12 @@ Route::middleware(['client', 'status'])->group(function () {
         Route::post('/update/coupon', 'UpdateCoupon')->name('coupon.update');
         Route::get('/delete/coupon/{id}', 'DeleteCoupon')->name('delete.coupon');
     });
+
+
+    Route::controller(ManageOrderController::class)->group(function () {
+        Route::get('/all/client/orders', 'AllClientOrders')->name('all.client.orders');
+        Route::get('/client/order/details/{id}', 'ClientOrderDetails')->name('client.order.details');
+    });
 });
 
 // That will be for all user
@@ -161,5 +197,11 @@ Route::controller(CartController::class)->group(function () {
     Route::post('/cart/update-quantity', 'updateCartQuantity')->name('cart.updateQuantity');
     Route::post('/cart/remove', 'RemoveToCart')->name('cart.remove');
     Route::post('/apply-coupon', 'ApplyCoupon');
+    Route::get('/remove-coupon', 'RemoveCoupon');
+    Route::get('/checkout', 'ShopCheckout')->name('checkout');
+});
+
+Route::controller(OrderController::class)->group(function () {
+    Route::post('/cash_order', 'CashOrder')->name('cash_order');
 
 });

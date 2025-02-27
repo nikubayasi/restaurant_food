@@ -74,8 +74,8 @@
                                         in</button>
                                     <div class="text-center pt-3">
                                         Don’t have an account? <a class="font-weight-bold"
-                                            href="{{ route('register') }}">Sign
-                                            Up</a>
+                                            href="{{ route('login') }}">Sign
+                                            in</a>
                                     </div>
                                 </form>
                                 <hr class="my-4">

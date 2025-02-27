@@ -16,6 +16,9 @@ class CartController extends Controller
     //
     public function AddToCart($id)
     {
+        if(Session::has('coupon')){
+            Session::forget('coupon');
+        }
         $products = Product::find($id);
         $cart = session()->get('cart', []);
         if (isset($cart[$id])) {
@@ -67,6 +70,8 @@ class CartController extends Controller
             'alert-type' => 'success'
         ]);
     }
+        //End Method
+
     public function ApplyCoupon(Request $request){
         $coupon = Coupon::where('coupon_name',$request->coupon_name)->where('validity', '>=',Carbon::now()->format('Y-m-d'))->first();
         $carts = session()->get('cart',[]);
@@ -104,6 +109,37 @@ class CartController extends Controller
         }else{
             return response()->json(['error' => 'Invalid Coupon']);
         }
+    }
+    //End Method
+    public function RemoveCoupon(){
+        Session::forget('coupon');
+        return response()->json(['success' => 'Coupon Remove Successfuly']);
+    }
+    public function ShopCheckout(){
+        if(Auth::check()){
+            $cart = session()->get('cart',[]);
+            $totalAmount = 0;
+            foreach($cart as $car){
+                $totalAmount += $car['price'];
+            }
+            if($totalAmount > 0){
+                return view('frontend.checkout.view_checkout',compact('cart'));
+            }else{
+                $notification = array(
+                    'message' => 'Shopping at list one item',
+                    'alerrt-type'=> 'error',
+                );
+                return redirect()->to('/')->with($notification);
+            }
+
+        }else{
+            $notification = array(
+                'message' => 'Please Login First',
+                'alerrt-type'=> 'success',
+            );
+            return redirect()->route('login')->with($notification);
+        }
+
     }
 
 }
