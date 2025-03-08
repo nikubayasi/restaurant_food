@@ -14,6 +14,10 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\OrderController;
 use App\Http\Controllers\Admin\ManageOrderController;
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Frontend\ReviewController;
+use App\Http\Controllers\Frontend\FilterController;
+
 
 
 
@@ -44,8 +48,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/user/order/details/{id}', 'UserOrderDetails')->name('user.order.details');
         Route::get('/user/order/download/{id}', 'UserInvoiceDownload')->name('user.invoice.download');
     });
-
-
 });
 
 require __DIR__ . '/auth.php';
@@ -140,6 +142,17 @@ Route::middleware('admin')->group(function () {
         Route::get('/processing_to_deliverd/{id}', 'ProcessingToDeliverd')->name('processing_to_deliverd');
     });
 
+    Route::controller(ReportController::class)->group(function () {
+        Route::get('/admin/all/reports', 'AdminAllReports')->name('admin.all.reports');
+        Route::post('/admin/search/bydate', 'AdminSearchByDate')->name('admin.search.bydate');
+        Route::post('/admin/search/bymonth', 'AdminSearchByMonth')->name('admin.search.bymonth');
+        Route::post('/admin/search/byyear', 'AdminSearchByYear')->name('admin.search.byyear');
+    });
+    Route::controller(ReviewController::class)->group(function () {
+        Route::get('/admin/pending/review', 'AdminPendingReview')->name('admin.pending.review');
+        Route::get('/admin/approve/review', 'AdminApproveReview')->name('admin.approve.review');
+        Route::get('/reviewchangeStatus', 'ReviewChangeStatus');
+    });
 });
 
 
@@ -183,6 +196,21 @@ Route::middleware(['client', 'status'])->group(function () {
         Route::get('/all/client/orders', 'AllClientOrders')->name('all.client.orders');
         Route::get('/client/order/details/{id}', 'ClientOrderDetails')->name('client.order.details');
     });
+
+    Route::controller(ReportController::class)->group(function () {
+        Route::get('/client/all/reports', 'AllClientOrders')->name('client.all.reports');
+        Route::post('/client/search/bydate', 'ClientSearchByDate')->name('client.search.bydate');
+        Route::post('/client/search/bymonth', 'ClientSearchByMonth')->name('client.search.bymonth');
+        Route::post('/client/search/byyear', 'ClientSearchByYear')->name('client.search.byyear');
+    });
+
+    Route::controller(ReviewController::class)->group(function () {
+        Route::get('/client/all/reviews', 'ClientAllReviews')->name('client.all.reviews');
+        // Route::get('/client/pending/review', 'AdminPendingReview')->name('client.pending.review');
+
+
+    });
+
 });
 
 // That will be for all user
@@ -205,3 +233,11 @@ Route::controller(OrderController::class)->group(function () {
     Route::post('/cash_order', 'CashOrder')->name('cash_order');
 
 });
+
+Route::controller(ReviewController::class)->group(function () {
+    Route::post('/store/review', 'StoreReview')->name('store.review');
+});
+Route::controller(FilterController::class)->group(function () {
+    Route::get('/list/restaurant', 'ListRestaurant')->name('list.restaurant');
+});
+

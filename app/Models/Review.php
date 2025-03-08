@@ -2,21 +2,19 @@
 
 namespace App\Models;
 
-use App\Models\OrderItem;
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class Review extends Model
 {
     //
     protected $guarded = [];
-
+    public function client()
+    {
+        return $this->belongsTo(Client::class, 'client_id', 'id');
+    }
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function OrderItems()
-    {
-        return $this->hasMany(OrderItem::class, 'order_id', 'id');
-    }
 }

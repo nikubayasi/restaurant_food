@@ -27,13 +27,18 @@
                             ->where('status', '1')
                             ->first();
                     @endphp
+
+                    @php
+                        $reviewcount = App\Models\Review::where('client_id',$client->id)->where('status',1)->latest()->get();
+                        $avarage = App\Models\Review::where('client_id',$client->id)->where('status',1)->avg('rating');
+                    @endphp
                     <div class="col-md-12">
                         <div class="owl-carousel owl-carousel-four owl-theme">
                             <div class="item m-1 mb-2">
                                 <div class="list-card bg-white h-100 rounded overflow-hidden position-relative shadow-sm">
                                     <div class="list-card-image">
                                         <div class="star position-absolute"><span class="badge badge-success"><i
-                                                    class="icofont-star"></i> 3.1 (300+)</span></div>
+                                                    class="icofont-star"></i> {{ number_format($avarage,1) }} ({{ count($reviewcount) }}+)</span></div>
 
                                         <div class="favourite-heart text-danger position-absolute">
                                             <a aria-label="Add to Widhlist" onclick="addWishList({{ $client->id }})">

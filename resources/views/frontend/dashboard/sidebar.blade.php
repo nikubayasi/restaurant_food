@@ -14,7 +14,7 @@
                     <div class="osahan-user-media-body">
                         <h6 class="mb-2">{{ $profileData->name }}</h6>
                         <p class="mb-1">{{ $profileData->phone }}</p>
-                        <p>{{ $profileData->phone }}</p>
+
 
                     </div>
                 </div>
